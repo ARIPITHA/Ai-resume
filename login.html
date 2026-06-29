@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneStep AI — Login & Signup</title>
+  <meta name="description" content="Sign in or create your OneStep AI account to start building AI-powered resumes.">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-heading: 'Outfit', 'Inter', system-ui, sans-serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --bg-app: #090a0f;
+      --bg-surface: #141722;
+      --bg-surface-hover: #1b1f2e;
+      --bg-input: #1a1e2d;
+      --border-color: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.12);
+      --border-focus: #6366f1;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --primary: #6366f1;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      --success: #10b981;
+      --error: #ef4444;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-app);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* Animated background orbs */
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.15;
+      animation: floatOrb 14s ease-in-out infinite;
+    }
+    .orb-1 { width: 500px; height: 500px; background: #6366f1; top: -150px; left: -150px; }
+    .orb-2 { width: 400px; height: 400px; background: #a855f7; bottom: -100px; right: -100px; animation-delay: -5s; }
+    @keyframes floatOrb {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      50% { transform: translate(40px,-30px) scale(1.08); }
+    }
+
+    .auth-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-hero {
+      background: linear-gradient(160deg, #0e0f1a 0%, #12142a 50%, #0a0c1a 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+      position: relative;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .hero-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .hero-logo-icon {
+      width: 44px; height: 44px;
+      background: var(--primary-gradient);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 800; font-size: 1.4rem;
+      font-family: var(--font-heading);
+      box-shadow: 0 4px 16px rgba(99,102,241,0.4);
+    }
+    .hero-logo-text {
+      font-family: var(--font-heading);
+      font-weight: 800; font-size: 1.4rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .hero-headline {
+      font-family: var(--font-heading);
+      font-size: 3.2rem; font-weight: 800;
+      line-height: 1.15; letter-spacing: -0.04em;
+      margin-bottom: 20px;
+    }
+    .hero-headline .grad { background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .hero-sub {
+      color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7;
+      max-width: 440px; margin-bottom: 40px;
+    }
+
+    .hero-features { display: flex; flex-direction: column; gap: 16px; }
+    .hero-feature {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px;
+      background: rgba(99,102,241,0.06);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: var(--radius-md);
+    }
+    .hero-feature-icon {
+      width: 38px; height: 38px;
+      background: rgba(99,102,241,0.15);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #a855f7; flex-shrink: 0;
+    }
+    .hero-feature-icon svg { width: 18px; height: 18px; }
+    .hero-feature-text { font-size: 0.9rem; color: var(--text-secondary); }
+    .hero-feature-text strong { color: var(--text-primary); display: block; margin-bottom: 2px; }
+
+    .auth-form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 40px 60px;
+      background: var(--bg-app);
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    .auth-card { width: 100%; max-width: 480px; padding-top: 10px; }
+
+    .auth-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.8rem; font-weight: 700;
+      letter-spacing: -0.03em; margin-bottom: 6px;
+    }
+    .auth-card-sub { color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 24px; }
+
+    /* Role Selector Cards */
+    .role-selector {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px;
+    }
+    .role-btn {
+      padding: 20px 16px; border-radius: var(--radius-md);
+      border: 1.5px solid var(--border-color); background: var(--bg-surface);
+      color: var(--text-secondary); cursor: pointer; text-align: center;
+      transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .role-btn svg { width: 28px; height: 28px; }
+    .role-btn-label { font-weight: 700; font-size: 1rem; color: var(--text-primary); }
+    .role-btn-sub { font-size: 0.75rem; color: var(--text-muted); }
+    .role-btn:hover { border-color: var(--primary); background: rgba(99,102,241,0.06); transform: translateY(-2px); }
+    .role-btn.selected { border-color: var(--primary); background: rgba(99,102,241,0.12); box-shadow: 0 0 0 3px rgba(99,102,241,0.2); }
+    .role-btn.selected .role-btn-label { color: var(--primary); }
+
+    /* Wizard Step Bar */
+    .step-indicator { display: flex; align-items: center; margin-bottom: 28px; }
+    .step-dot {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+      border: 1.5px solid var(--border-color); background: var(--bg-surface);
+      color: var(--text-muted); transition: all 0.2s ease; flex-shrink: 0;
+    }
+    .step-dot.active { background: var(--primary-gradient); border-color: transparent; color: white; box-shadow: 0 0 12px rgba(99,102,241,0.4); }
+    .step-dot.done { background: var(--success); border-color: transparent; color: white; }
+    .step-line { flex-grow: 1; height: 2px; background: var(--border-color); transition: background 0.3s ease; }
+    .step-line.done { background: var(--success); }
+
+    .step-label-tag {
+      font-size: 0.8rem; font-weight: 700; color: var(--primary);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; display: block;
+    }
+
+    /* Form Controls */
+    .form-group { margin-bottom: 18px; display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+    .form-control {
+      background: var(--bg-input); border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm); padding: 12px 14px;
+      color: var(--text-primary); font-family: var(--font-body); font-size: 0.92rem;
+      transition: all 0.15s ease; width: 100%;
+    }
+    .form-control:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(99,102,241,0.18); }
+    .form-control::placeholder { color: var(--text-muted); }
+    textarea.form-control { resize: vertical; min-height: 95px; line-height: 1.5; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .btn-primary {
+      width: 100%; padding: 13px; background: var(--primary-gradient);
+      border: none; border-radius: var(--radius-sm); color: white;
+      font-family: var(--font-heading); font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s ease; display: flex;
+      align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.3); margin-top: 10px;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,102,241,0.45); }
+
+    .btn-secondary {
+      width: 100%; padding: 12px; background: transparent;
+      border: 1px solid var(--border-color); border-radius: var(--radius-sm);
+      color: var(--text-secondary); font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; transition: all 0.15s ease; display: flex;
+      align-items: center; justify-content: center; gap: 8px; margin-top: 8px;
+    }
+    .btn-secondary:hover { border-color: var(--border-hover); color: var(--text-primary); background: var(--bg-surface); }
+
+    .nav-btns { display: grid; grid-template-columns: 1fr 2fr; gap: 12px; margin-top: 16px; }
+    .nav-btns .btn-primary, .nav-btns .btn-secondary { margin-top: 0; }
+
+    /* Repeater Blocks */
+    .repeater-item {
+      border: 1px solid var(--border-color); border-radius: var(--radius-md);
+      padding: 18px; margin-bottom: 14px; background: var(--bg-surface);
+    }
+    .repeater-item-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .repeater-item-title { font-weight: 700; font-size: 0.88rem; color: var(--text-primary); }
+    .btn-remove {
+      background: none; border: none; color: var(--error); cursor: pointer;
+      display: flex; align-items: center; gap: 4px; font-size: 0.78rem; opacity: 0.8;
+    }
+    .btn-remove:hover { opacity: 1; }
+
+    .btn-add-more {
+      width: 100%; padding: 10px; border: 1.5px dashed var(--border-color);
+      background: transparent; border-radius: var(--radius-sm);
+      color: var(--text-secondary); font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all 0.15s ease; display: flex;
+      align-items: center; justify-content: center; gap: 6px; margin-top: 6px;
+    }
+    .btn-add-more:hover { border-color: var(--primary); color: var(--primary); background: rgba(99,102,241,0.05); }
+
+    /* Skills Cloud */
+    .skills-tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .skill-chip {
+      display: flex; align-items: center; gap: 6px; padding: 6px 12px;
+      background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--primary);
+    }
+    .skill-chip-remove { background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; }
+    .skill-chip-remove:hover { color: var(--error); }
+
+    .alert {
+      padding: 14px 16px; border-radius: var(--radius-sm); font-size: 0.88rem;
+      margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+    }
+    .alert-error { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+
+    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--text-muted); font-size: 0.82rem; }
+    .divider::before, .divider::after { content: ''; flex-grow: 1; height: 1px; background: var(--border-color); }
+
+    .step-section { display: none; }
+    .step-section.active { display: block; }
+
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 9999; background: rgba(9,10,15,0.92);
+      display: none; align-items: center; justify-content: center; flex-direction: column; gap: 20px;
+    }
+    .loading-overlay.show { display: flex; }
+    .loader-ring {
+      width: 60px; height: 60px; border: 3px solid rgba(99,102,241,0.2);
+      border-top: 3px solid #6366f1; border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader-text { color: var(--text-secondary); font-size: 0.95rem; font-weight: 500; }
+
+    @media (max-width: 900px) {
+      .auth-layout { grid-template-columns: 1fr; }
+      .auth-hero { display: none; }
+      .auth-form-panel { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loader-ring"></div>
+    <div class="loader-text" id="loading-text">Preparing your session...</div>
+  </div>
+
+  <div class="auth-layout">
+    <!-- HERO LEFT -->
+    <div class="auth-hero">
+      <div class="hero-logo">
+        <div class="hero-logo-icon">O</div>
+        <span class="hero-logo-text">OneStep AI</span>
+      </div>
+
+      <h1 class="hero-headline">
+        Accelerate Your<br>
+        <span class="grad">Career Journey</span>
+      </h1>
+      <p class="hero-sub">
+        Create ATS-optimized resumes, receive real-time AI feedback, and get personalized interview coaching for top tech roles.
+      </p>
+
+      <div class="hero-features">
+        <div class="hero-feature">
+          <div class="hero-feature-icon"><i data-lucide="sparkles"></i></div>
+          <div class="hero-feature-text">
+            <strong>AI Resume Builder & Chat</strong>
+            Intelligent assistant that rewrites and strengthens bullet points
+          </div>
+        </div>
+        <div class="hero-feature">
+          <div class="hero-feature-icon"><i data-lucide="gauge"></i></div>
+          <div class="hero-feature-text">
+            <strong>ATS Compliance Diagnostic</strong>
+            Scan your resume against real job descriptions
+          </div>
+        </div>
+        <div class="hero-feature">
+          <div class="hero-feature-icon"><i data-lucide="shield-check"></i></div>
+          <div class="hero-feature-text">
+            <strong>Admin & Candidate Portal</strong>
+            Dedicated portals for full management and customization
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM RIGHT -->
+    <div class="auth-form-panel">
+      <div class="auth-card">
+
+        <!-- SCREEN 0: ROLE SELECTOR -->
+        <div class="step-section active" id="screen-role">
+          <div class="hero-logo" style="margin-bottom:24px;">
+            <div class="hero-logo-icon">O</div>
+            <span class="hero-logo-text">OneStep AI</span>
+          </div>
+          <h2 class="auth-card-title">Welcome to OneStep</h2>
+          <p class="auth-card-sub">Select your portal to log in or register</p>
+
+          <div class="role-selector">
+            <div class="role-btn" id="role-user-btn" onclick="selectRole('user')">
+              <i data-lucide="user-circle" style="color: #6366f1;"></i>
+              <span class="role-btn-label">Job Seeker</span>
+              <span class="role-btn-sub">Build resume & track prep</span>
+            </div>
+            <div class="role-btn" id="role-admin-btn" onclick="selectRole('admin')">
+              <i data-lucide="shield-check" style="color: #a855f7;"></i>
+              <span class="role-btn-label">Admin</span>
+              <span class="role-btn-sub">Manage platform & data</span>
+            </div>
+          </div>
+
+          <div id="alert-role" class="alert alert-error" style="display:none;">
+            <i data-lucide="alert-circle"></i>
+            <span id="alert-role-msg">Please select a portal.</span>
+          </div>
+
+          <button class="btn-primary" onclick="proceedRole()">
+            Continue <i data-lucide="arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- SCREEN ADMIN: LOGIN -->
+        <div class="step-section" id="screen-admin">
+          <button onclick="showScreen('screen-role')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:6px;font-size:0.85rem;margin-bottom:20px;">
+            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Back
+          </button>
+          <h2 class="auth-card-title">Admin Sign In</h2>
+          <p class="auth-card-sub">Administrator credentials required</p>
+
+          <div id="alert-admin" class="alert alert-error" style="display:none;">
+            <i data-lucide="alert-circle"></i>
+            <span id="alert-admin-msg">Invalid credentials.</span>
+          </div>
+
+          <div class="form-group">
+            <label>Admin Username</label>
+            <input type="text" id="admin-user" class="form-control" placeholder="admin" value="admin">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="admin-pass" class="form-control" placeholder="••••••••" value="admin123" onkeydown="if(event.key==='Enter') loginAdmin()">
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:16px;">Demo credentials pre-filled: admin / admin123</p>
+
+          <button class="btn-primary" onclick="loginAdmin()">
+            <i data-lucide="shield-check"></i> Enter Admin Portal
+          </button>
+        </div>
+
+        <!-- SCREEN USER: SIGNIN OR SIGNUP CHOICE -->
+        <div class="step-section" id="screen-user-choice">
+          <button onclick="showScreen('screen-role')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:6px;font-size:0.85rem;margin-bottom:20px;">
+            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Back
+          </button>
+          <h2 class="auth-card-title">Candidate Portal</h2>
+          <p class="auth-card-sub">Sign in with your email or register a new candidate account</p>
+
+          <div id="alert-user-login" class="alert alert-error" style="display:none;">
+            <i data-lucide="alert-circle"></i>
+            <span id="alert-user-login-msg">Error signing in.</span>
+          </div>
+
+          <div id="login-fields">
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="user-login-email" class="form-control" placeholder="sarah@gmail.com">
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" id="user-login-pass" class="form-control" placeholder="••••••••" onkeydown="if(event.key==='Enter') loginUserExisting()">
+            </div>
+            <button class="btn-primary" onclick="loginUserExisting()">
+              <i data-lucide="log-in"></i> Sign In
+            </button>
+            <div class="divider">or</div>
+            <button class="btn-secondary" onclick="startRegistrationWizard()">
+              <i data-lucide="user-plus"></i> Register & Build Resume Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- SCREEN USER: MULTI-STEP SIGNUP WIZARD -->
+        <div class="step-section" id="screen-wizard">
+          <button onclick="showScreen('screen-user-choice')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:6px;font-size:0.85rem;margin-bottom:20px;">
+            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Back to Sign In
+          </button>
+
+          <!-- Progress Dots -->
+          <div class="step-indicator">
+            <div class="step-dot active" id="wdot-1">1</div>
+            <div class="step-line" id="wline-1"></div>
+            <div class="step-dot" id="wdot-2">2</div>
+            <div class="step-line" id="wline-2"></div>
+            <div class="step-dot" id="wdot-3">3</div>
+            <div class="step-line" id="wline-3"></div>
+            <div class="step-dot" id="wdot-4">4</div>
+            <div class="step-line" id="wline-4"></div>
+            <div class="step-dot" id="wdot-5">5</div>
+          </div>
+
+          <div id="alert-wizard" class="alert alert-error" style="display:none;">
+            <i data-lucide="alert-circle"></i>
+            <span id="alert-wizard-msg">Please complete all required fields.</span>
+          </div>
+
+          <!-- STEP 1: ACCOUNT & PERSONAL INFO -->
+          <div id="wiz-step-1" class="step-section active">
+            <span class="step-label-tag">Step 1 of 5 — Account & Contact</span>
+            <h2 class="auth-card-title" style="font-size:1.4rem;">Personal Details</h2>
+            <p class="auth-card-sub">Your contact information for the resume header</p>
+
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="w-fullname" class="form-control" placeholder="Sarah Jenkins" value="Sarah Jenkins">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" id="w-email" class="form-control" placeholder="sjenkins@gmail.com" value="sjenkins@gmail.com">
+              </div>
+              <div class="form-group">
+                <label>Password *</label>
+                <input type="password" id="w-password" class="form-control" placeholder="••••••••" value="password123">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="text" id="w-phone" class="form-control" placeholder="(555) 019-2834" value="(555) 019-2834">
+              </div>
+              <div class="form-group">
+                <label>Location *</label>
+                <input type="text" id="w-location" class="form-control" placeholder="San Francisco, CA" value="San Francisco, CA">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Portfolio / LinkedIn URL</label>
+              <input type="text" id="w-website" class="form-control" placeholder="sjenkins.dev" value="sjenkins.dev">
+            </div>
+
+            <button class="btn-primary" onclick="navWiz(1, 2)">Next <i data-lucide="arrow-right"></i></button>
+          </div>
+
+          <!-- STEP 2: TARGET ROLE & SUMMARY -->
+          <div id="wiz-step-2" class="step-section">
+            <span class="step-label-tag">Step 2 of 5 — Target & Summary</span>
+            <h2 class="auth-card-title" style="font-size:1.4rem;">Career Focus</h2>
+            <p class="auth-card-sub">Tell us your target role and summary overview</p>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Target Role *</label>
+                <input type="text" id="w-role" class="form-control" placeholder="Software Engineer II" value="Software Engineer II">
+              </div>
+              <div class="form-group">
+                <label>Target Company</label>
+                <input type="text" id="w-target-comp" class="form-control" placeholder="Google" value="Google">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Professional Summary</label>
+              <textarea id="w-summary" class="form-control" placeholder="Results-oriented Software Engineer with experience designing scalable web services...">Results-oriented Software Engineer with 3+ years of experience designing and scaling web services, microservices architectures, and relational schemas.</textarea>
+            </div>
+
+            <div class="nav-btns">
+              <button class="btn-secondary" onclick="navWiz(2, 1)"><i data-lucide="arrow-left"></i> Back</button>
+              <button class="btn-primary" onclick="navWiz(2, 3)">Next <i data-lucide="arrow-right"></i></button>
+            </div>
+          </div>
+
+          <!-- STEP 3: WORK EXPERIENCE -->
+          <div id="wiz-step-3" class="step-section">
+            <span class="step-label-tag">Step 3 of 5 — Work History</span>
+            <h2 class="auth-card-title" style="font-size:1.4rem;">Work Experience</h2>
+            <p class="auth-card-sub">Add your employment background</p>
+
+            <div id="wiz-exp-list"></div>
+            <button class="btn-add-more" onclick="addWizExpBlock()"><i data-lucide="plus"></i> Add Work Position</button>
+
+            <div class="nav-btns" style="margin-top:16px;">
+              <button class="btn-secondary" onclick="navWiz(3, 2)"><i data-lucide="arrow-left"></i> Back</button>
+              <button class="btn-primary" onclick="navWiz(3, 4)">Next <i data-lucide="arrow-right"></i></button>
+            </div>
+          </div>
+
+          <!-- STEP 4: EDUCATION -->
+          <div id="wiz-step-4" class="step-section">
+            <span class="step-label-tag">Step 4 of 5 — Education</span>
+            <h2 class="auth-card-title" style="font-size:1.4rem;">Education</h2>
+            <p class="auth-card-sub">Add your degrees and academic credentials</p>
+
+            <div id="wiz-edu-list"></div>
+            <button class="btn-add-more" onclick="addWizEduBlock()"><i data-lucide="plus"></i> Add Education</button>
+
+            <div class="nav-btns" style="margin-top:16px;">
+              <button class="btn-secondary" onclick="navWiz(4, 3)"><i data-lucide="arrow-left"></i> Back</button>
+              <button class="btn-primary" onclick="navWiz(4, 5)">Next <i data-lucide="arrow-right"></i></button>
+            </div>
+          </div>
+
+          <!-- STEP 5: SKILLS & SUBMIT -->
+          <div id="wiz-step-5" class="step-section">
+            <span class="step-label-tag">Step 5 of 5 — Skills & Complete</span>
+            <h2 class="auth-card-title" style="font-size:1.4rem;">Technical Skills</h2>
+            <p class="auth-card-sub">Add your core technical competencies</p>
+
+            <div class="form-group">
+              <label>Skills (comma separated) *</label>
+              <input type="text" id="w-skills-input" class="form-control" value="React, Node.js, Go, PostgreSQL, AWS, Git, REST APIs, Jest">
+            </div>
+
+            <button class="btn-primary" onclick="completeRegistration()" style="margin-top:24px;">
+              <i data-lucide="check-circle"></i> Create Profile & Generate Resume
+            </button>
+            <button class="btn-secondary" onclick="navWiz(5, 4)">
+              <i data-lucide="arrow-left"></i> Back
+            </button>
+          </div>
+
+        </div><!-- /screen-wizard -->
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedRole = null;
+    let expCounter = 0;
+    let eduCounter = 0;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      // Pre-fill default work experience and education blocks
+      addWizExpBlock("Google", "Software Engineer II", "2024 – Present", "Led engineering for critical Google Cloud storage API routes.\nCollaborated with cross-functional infrastructure teams.");
+      addWizExpBlock("Stripe", "Associate Developer", "2022 – 2024", "Integrated third-party payment gateways and webhooks.\nRefactored backend controllers.");
+      addWizEduBlock("University of California, Berkeley", "B.S. Computer Science", "2018 – 2022", "GPA: 3.8 / Honors");
+    });
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.getElementById("role-user-btn").classList.toggle("selected", role === "user");
+      document.getElementById("role-admin-btn").classList.toggle("selected", role === "admin");
+      document.getElementById("alert-role").style.display = "none";
+    }
+
+    function proceedRole() {
+      if (!selectedRole) {
+        document.getElementById("alert-role").style.display = "flex";
+        return;
+      }
+      if (selectedRole === "admin") {
+        showScreen("screen-admin");
+      } else {
+        showScreen("screen-user-choice");
+      }
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll(".step-section").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      lucide.createIcons();
+    }
+
+    function loginAdmin() {
+      const u = document.getElementById("admin-user").value.trim();
+      const p = document.getElementById("admin-pass").value.trim();
+      if (u === "admin" && p === "admin123") {
+        showLoading("Signing into Admin Portal...");
+        setTimeout(() => {
+          localStorage.setItem("onestep_logged_in", "true");
+          localStorage.setItem("onestep_role", "admin");
+          localStorage.setItem("onestep_username", "Administrator");
+          window.location.href = "index.html";
+        }, 1000);
+      } else {
+        const al = document.getElementById("alert-admin");
+        al.style.display = "flex";
+        document.getElementById("alert-admin-msg").textContent = "Invalid admin username or password.";
+      }
+    }
+
+    function loginUserExisting() {
+      const email = document.getElementById("user-login-email").value.trim();
+      if (!email) {
+        document.getElementById("alert-user-login").style.display = "flex";
+        document.getElementById("alert-user-login-msg").textContent = "Please enter your email.";
+        return;
+      }
+      showLoading("Loading your candidate profile...");
+      setTimeout(() => {
+        localStorage.setItem("onestep_logged_in", "true");
+        localStorage.setItem("onestep_role", "user");
+        localStorage.setItem("onestep_username", email.split("@")[0]);
+        window.location.href = "index.html";
+      }, 1000);
+    }
+
+    function startRegistrationWizard() {
+      showScreen("screen-wizard");
+      navWiz(1, 1);
+    }
+
+    function navWiz(fromStep, toStep) {
+      // Validate
+      if (fromStep === 1 && toStep > 1) {
+        const name = document.getElementById("w-fullname").value.trim();
+        const email = document.getElementById("w-email").value.trim();
+        if (!name || !email) {
+          document.getElementById("alert-wizard").style.display = "flex";
+          document.getElementById("alert-wizard-msg").textContent = "Name and Email are required.";
+          return;
+        }
+      }
+      document.getElementById("alert-wizard").style.display = "none";
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById(`wiz-step-${i}`).classList.toggle("active", i === toStep);
+        const dot = document.getElementById(`wdot-${i}`);
+        if (dot) {
+          dot.classList.remove("active", "done");
+          if (i < toStep) { dot.classList.add("done"); dot.textContent = "✓"; }
+          else if (i === toStep) { dot.classList.add("active"); dot.textContent = i; }
+          else dot.textContent = i;
+        }
+        const line = document.getElementById(`wline-${i}`);
+        if (line) line.classList.toggle("done", i < toStep);
+      }
+      lucide.createIcons();
+    }
+
+    function addWizExpBlock(comp="", role="", dur="", bullets="") {
+      expCounter++;
+      const id = `wexp-${expCounter}`;
+      const div = document.createElement("div");
+      div.className = "repeater-item";
+      div.id = id;
+      div.innerHTML = `
+        <div class="repeater-item-header">
+          <span class="repeater-item-title">Position #${expCounter}</span>
+          <button class="btn-remove" onclick="document.getElementById('${id}').remove()"><i data-lucide="trash-2"></i> Remove</button>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Company</label><input type="text" class="form-control wexp-comp" value="${comp}"></div>
+          <div class="form-group"><label>Role</label><input type="text" class="form-control wexp-role" value="${role}"></div>
+        </div>
+        <div class="form-group"><label>Duration</label><input type="text" class="form-control wexp-dur" value="${dur}"></div>
+        <div class="form-group"><label>Achievements (one per line)</label><textarea class="form-control wexp-bullets">${bullets}</textarea></div>
+      `;
+      document.getElementById("wiz-exp-list").appendChild(div);
+      lucide.createIcons();
+    }
+
+    function addWizEduBlock(inst="", deg="", dur="", honors="") {
+      eduCounter++;
+      const id = `wedu-${eduCounter}`;
+      const div = document.createElement("div");
+      div.className = "repeater-item";
+      div.id = id;
+      div.innerHTML = `
+        <div class="repeater-item-header">
+          <span class="repeater-item-title">Education #${eduCounter}</span>
+          <button class="btn-remove" onclick="document.getElementById('${id}').remove()"><i data-lucide="trash-2"></i> Remove</button>
+        </div>
+        <div class="form-group"><label>Institution</label><input type="text" class="form-control wedu-inst" value="${inst}"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Degree</label><input type="text" class="form-control wedu-deg" value="${deg}"></div>
+          <div class="form-group"><label>Duration</label><input type="text" class="form-control wedu-dur" value="${dur}"></div>
+        </div>
+        <div class="form-group"><label>Honors / Notes</label><input type="text" class="form-control wedu-honors" value="${honors}"></div>
+      `;
+      document.getElementById("wiz-edu-list").appendChild(div);
+      lucide.createIcons();
+    }
+
+    function completeRegistration() {
+      const name = document.getElementById("w-fullname").value.trim();
+      const email = document.getElementById("w-email").value.trim();
+      const phone = document.getElementById("w-phone").value.trim();
+      const location = document.getElementById("w-location").value.trim();
+      const website = document.getElementById("w-website").value.trim();
+      const role = document.getElementById("w-role").value.trim();
+      const targetCompany = document.getElementById("w-target-comp").value.trim().toLowerCase() || "google";
+      const summary = document.getElementById("w-summary").value.trim();
+      const skillsRaw = document.getElementById("w-skills-input").value.trim();
+      const skills = skillsRaw.split(",").map(s => s.trim()).filter(s => s.length > 0);
+
+      const experience = [];
+      document.querySelectorAll("#wiz-exp-list .repeater-item").forEach((item, idx) => {
+        const c = item.querySelector(".wexp-comp").value.trim();
+        const r = item.querySelector(".wexp-role").value.trim();
+        const d = item.querySelector(".wexp-dur").value.trim();
+        const bRaw = item.querySelector(".wexp-bullets").value.trim();
+        if (c && r) {
+          const bullets = bRaw.split("\n").map(b => b.trim()).filter(b => b.length > 0);
+          experience.push({ id: `exp${idx+1}`, company: c, role: r, duration: d, bullets });
+        }
+      });
+
+      const education = [];
+      document.querySelectorAll("#wiz-edu-list .repeater-item").forEach((item, idx) => {
+        const inst = item.querySelector(".wedu-inst").value.trim();
+        const deg = item.querySelector(".wedu-deg").value.trim();
+        const dur = item.querySelector(".wedu-dur").value.trim();
+        const h = item.querySelector(".wedu-honors").value.trim();
+        if (inst) {
+          education.push({ id: `edu${idx+1}`, institution: inst, degree: deg, duration: dur, honors: h });
+        }
+      });
+
+      const resumeData = {
+        name, email, phone, location, website, summary,
+        experience, education, skills,
+        projects: [
+          { id: "proj1", title: "Scalable Cloud Microservices", desc: "Built distributed event pipeline handling high volume transaction logs.", link: "github.com/example/pipeline" }
+        ]
+      };
+
+      showLoading("Building your AI resume workspace...");
+      setTimeout(() => {
+        localStorage.setItem("onestep_logged_in", "true");
+        localStorage.setItem("onestep_role", "user");
+        localStorage.setItem("onestep_username", name);
+        localStorage.setItem("onestep_user_tier", "Premium Member");
+        localStorage.setItem("onestep_resume_data", JSON.stringify(resumeData));
+        localStorage.setItem("onestep_target_company", targetCompany);
+        window.location.href = "index.html";
+      }, 1500);
+    }
+
+    function showLoading(txt) {
+      document.getElementById("loading-text").textContent = txt;
+      document.getElementById("loading-overlay").classList.add("show");
+    }
+  </script>
+</body>
+</html>

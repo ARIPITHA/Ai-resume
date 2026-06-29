@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneStep Resume AI - One Step Forward Towards Your Dream Career</title>
+  <meta name="description"
+    content="Build AI-powered resumes, optimize for ATS systems, discover skill roadmaps required by top companies, and prep for your dream technical career with our conversational coach.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+  <div id="app-layout">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside id="sidebar">
+      <div class="logo-area">
+        <div class="logo-icon">O</div>
+        <span class="logo-text">OneStep AI</span>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-item active" data-target="landing-view">
+          <i data-lucide="home"></i>
+          <span>Home</span>
+        </div>
+        <div class="nav-item" data-target="dashboard-view" id="nav-dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </div>
+        <div class="nav-item" data-target="resume-view" id="nav-resume">
+          <i data-lucide="file-text"></i>
+          <span>Resume Builder</span>
+        </div>
+        <div class="nav-item" data-target="ats-view">
+          <i data-lucide="gauge"></i>
+          <span>ATS Analyzer</span>
+        </div>
+        <div class="nav-item" data-target="companies-view">
+          <i data-lucide="building-2"></i>
+          <span>Company Prep</span>
+        </div>
+        <div class="nav-item" data-target="roadmap-view">
+          <i data-lucide="map"></i>
+          <span>Skill Roadmaps</span>
+        </div>
+        <div class="nav-item" data-target="coach-view">
+          <i data-lucide="message-square"></i>
+          <span>AI Career Coach</span>
+        </div>
+        <div class="nav-item" data-target="coverletter-view">
+          <i data-lucide="scroll"></i>
+          <span>Cover Letter Gen</span>
+        </div>
+        <div class="nav-item" data-target="portfolio-view">
+          <i data-lucide="panels-top-left"></i>
+          <span>Portfolio Builder</span>
+        </div>
+        <div class="nav-item" data-target="admin-view" id="nav-admin">
+          <i data-lucide="settings"></i>
+          <span>Admin Panel</span>
+        </div>
+        <div class="nav-item" data-target="support-chat-view" id="nav-support-chat">
+          <i data-lucide="messages-square"></i>
+          <span>Support Chat</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="theme-toggle-container">
+          <span>Dark Mode</span>
+          <label class="theme-switch">
+            <input type="checkbox" id="theme-checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="user-profile-summary" id="profile-summary-btn" style="flex-grow:1;">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
+            alt="User Avatar" class="user-avatar" id="sidebar-avatar">
+          <div class="user-info">
+            <span class="user-name" id="sidebar-username">Sarah Jenkins</span>
+            <span class="user-tier" id="sidebar-usertier">Premium Member</span>
+          </div>
+        </div>
+        <button class="btn-secondary-outline" id="btn-logout" onclick="logoutUser()"
+          style="padding:6px 10px; font-size:0.75rem; width:100%; justify-content:center; margin-top:4px;">
+          <i data-lucide="log-out" style="width:14px; height:14px;"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN WORKSPACE PANE -->
+    <main id="main-content">
+
+      <!-- TOP APP HEADER -->
+      <header class="app-header">
+        <div class="header-title-area">
+          <h2 id="header-page-title">Home</h2>
+        </div>
+        <div class="header-actions">
+          <button class="btn-secondary-outline" id="header-support-btn">
+            <i data-lucide="help-circle"></i>
+            <span>Support</span>
+          </button>
+          <button class="btn-primary-glow" id="header-upgrade-btn">
+            <i data-lucide="sparkles"></i>
+            <span>Upgrade to Pro</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW 1: LANDING PAGE -->
+      <div id="landing-view" class="page-view active animate-fade">
+        <section class="landing-hero">
+          <h1>One Step Forward Towards Your <span class="title-gradient">Dream Career</span></h1>
+          <p>Build AI-powered resumes, optimize for ATS filters, discover the precise skill roadmaps top companies
+            require, and learn everything you need to land your dream job.</p>
+          <div class="cta-buttons">
+            <button class="btn-primary-glow" onclick="navigateTo('resume-view')">Start Building Resume</button>
+            <button class="btn-secondary-outline" onclick="navigateTo('companies-view')">Explore Companies</button>
+          </div>
+        </section>
+
+        <!-- Company Logos Section -->
+        <section class="logos-section">
+          <p>Used by candidates placed at</p>
+          <div class="logos-container">
+            <span class="logo-item">Google</span>
+            <span class="logo-item">Meta</span>
+            <span class="logo-item">Stripe</span>
+            <span class="logo-item">Netflix</span>
+            <span class="logo-item">Apple</span>
+            <span class="logo-item">Amazon</span>
+            <span class="logo-item">Microsoft</span>
+          </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="landing-features-sec">
+          <h2 class="section-title">Core Platform Features</h2>
+          <p class="section-subtitle">Everything you need to master your application, skills, and interview loops in a
+            single platform.</p>
+
+          <div class="grid-3">
+            <div class="glass-card feature-card interactive" onclick="navigateTo('resume-view')">
+              <div class="feature-card-icon"><i data-lucide="file-text"></i></div>
+              <h3>AI Resume Builder</h3>
+              <p>Extract details from raw text and optimize bullet points in real-time. Choose from beautiful layouts
+                and export pixel-perfect PDFs.</p>
+            </div>
+
+            <div class="glass-card feature-card interactive" onclick="navigateTo('ats-view')">
+              <div class="feature-card-icon"><i data-lucide="gauge"></i></div>
+              <h3>ATS Resume Analyzer</h3>
+              <p>Upload your resume against a target job description and get immediate scores, keyword checks, and
+                spelling/grammar evaluations.</p>
+            </div>
+
+            <div class="glass-card feature-card interactive" onclick="navigateTo('companies-view')">
+              <div class="feature-card-icon"><i data-lucide="building-2"></i></div>
+              <h3>Company Prep</h3>
+              <p>Explore full hiring processes, interview formats, salary tiers, and detailed interview Q&A lists for
+                50+ tier-1 companies.</p>
+            </div>
+
+            <div class="glass-card feature-card interactive" onclick="navigateTo('roadmap-view')">
+              <div class="feature-card-icon"><i data-lucide="map"></i></div>
+              <h3>Skill Roadmaps</h3>
+              <p>Generate learning pathways from scratch. Mark stages as complete and track your progress metrics
+                interactively.</p>
+            </div>
+
+            <div class="glass-card feature-card interactive" onclick="navigateTo('coach-view')">
+              <div class="feature-card-icon"><i data-lucide="message-square"></i></div>
+              <h3>AI Career Coach</h3>
+              <p>A conversational assistant that knows your resume data, handles mock technical scenarios, and optimizes
+                your application pitches.</p>
+            </div>
+
+            <div class="glass-card feature-card interactive" onclick="navigateTo('portfolio-view')">
+              <div class="feature-card-icon"><i data-lucide="panels-top-left"></i></div>
+              <h3>Portfolio Generator</h3>
+              <p>Convert your active resume into a responsive, beautiful web page with light/dark modes and animations
+                with a single click.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Templates Showcase Carousel -->
+        <section class="templates-showcase-sec">
+          <div class="templates-showcase-container">
+            <h2 class="section-title">Professional Resume Templates</h2>
+            <p class="section-subtitle">Meticulously formatted, fully readable designs designed to parse perfectly
+              through any modern ATS.</p>
+
+            <div class="templates-carousel">
+              <div class="carousel-slide" onclick="navigateTo('resume-view')">
+                <div class="preview-thumb">
+                  <strong style="font-size: 0.6rem; color: #1e1b4b;">Sarah Jenkins</strong>
+                  <span>Software Engineer | Mountain View, CA</span>
+                  <hr style="border: 0.5px solid #cbd5e1;">
+                  <div style="font-size: 0.35rem;">EXPERIENCE</div>
+                  <strong>Google - Software Engineer</strong>
+                  <span>Developed core cloud architectures...</span>
+                </div>
+                <div class="template-overlay"><button class="btn-primary-glow">Use Modern</button></div>
+              </div>
+
+              <div class="carousel-slide" onclick="navigateTo('resume-view')">
+                <div class="preview-thumb" style="font-family: serif; text-align: center;">
+                  <strong style="font-size: 0.6rem; color: black; display: block; margin: 0 auto;">Sarah
+                    Jenkins</strong>
+                  <span>sjenkins@gmail.com • (555) 019-2834</span>
+                  <hr style="border: 0.5px double #94a3b8;">
+                  <div style="font-size: 0.35rem; font-weight: bold; margin-top: 6px;">EXPERIENCE</div>
+                  <div style="text-align: left; font-size: 0.35rem; margin-top: 4px;"><strong>Google</strong> — Senior
+                    Software Developer</div>
+                </div>
+                <div class="template-overlay"><button class="btn-primary-glow">Use Classic</button></div>
+              </div>
+
+              <div class="carousel-slide" onclick="navigateTo('resume-view')">
+                <div class="preview-thumb" style="padding-left: 20px;">
+                  <strong style="font-size: 0.6rem; color: black;">Sarah Jenkins</strong>
+                  <div style="color:#9ca3af; font-size: 0.3rem; margin-top: 4px;">WORK EXPERIENCE</div>
+                  <strong>Google</strong>
+                  <span>Fullstack systems design & development...</span>
+                </div>
+                <div class="template-overlay"><button class="btn-primary-glow">Use Minimal</button></div>
+              </div>
+
+              <div class="carousel-slide" onclick="navigateTo('resume-view')">
+                <div class="preview-thumb" style="display: grid; grid-template-columns: 35% 65%; padding: 0;">
+                  <div style="background-color: #0f172a; color: white; padding: 8px; font-size: 0.3rem;">
+                    <strong>Sarah J.</strong>
+                    <div style="margin-top: 10px; font-size: 0.25rem;">SKILLS</div>
+                    <span>React, Node, Go</span>
+                  </div>
+                  <div style="padding: 8px;">
+                    <strong>Work Experience</strong>
+                    <span>Senior developer at Google engineering...</span>
+                  </div>
+                </div>
+                <div class="template-overlay"><button class="btn-primary-glow">Use Creative</button></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing-sec">
+          <h2 class="section-title">Simple, Transparent Pricing</h2>
+          <p class="section-subtitle">Choose the plan that matches your career goals. Cancel or swap tiers at any time.
+          </p>
+
+          <div class="pricing-toggle">
+            <span>Monthly Billing</span>
+            <label class="theme-switch">
+              <input type="checkbox" id="pricing-billing-checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+            <span>Annual Billing</span>
+            <span class="badge-discount">Save 20%</span>
+          </div>
+
+          <div class="pricing-grid">
+            <!-- Free Card -->
+            <div class="glass-card pricing-card">
+              <div class="pricing-card-header">
+                <div class="pricing-name">Free</div>
+                <div class="pricing-price">$0 <span>/ mo</span></div>
+              </div>
+              <ul class="pricing-features">
+                <li><i data-lucide="check"></i> 1 Resume build per month</li>
+                <li><i data-lucide="check"></i> 1 ATS Resume Analysis</li>
+                <li><i data-lucide="check"></i> Access to 5 Company databases</li>
+                <li><i data-lucide="check"></i> 3 Career Coach messages</li>
+                <li class="disabled"><i data-lucide="x"></i> Custom Portfolio Hosting</li>
+                <li class="disabled"><i data-lucide="x"></i> Unlimited Cover Letters</li>
+              </ul>
+              <button class="btn-pricing-cta" onclick="selectPricingPlan('Free')">Current Plan</button>
+            </div>
+
+            <!-- Premium Card -->
+            <div class="glass-card pricing-card popular">
+              <div class="pricing-card-header">
+                <div class="pricing-name">Premium</div>
+                <div class="pricing-price" id="premium-price-val">$9.99 <span>/ mo</span></div>
+              </div>
+              <ul class="pricing-features">
+                <li><i data-lucide="check"></i> Unlimited Resume builds</li>
+                <li><i data-lucide="check"></i> Unlimited ATS Analyses</li>
+                <li><i data-lucide="check"></i> Full Company Database (50+)</li>
+                <li><i data-lucide="check"></i> Unlimited Career Coach chat</li>
+                <li><i data-lucide="check"></i> 10 Cover Letters per month</li>
+                <li class="disabled"><i data-lucide="x"></i> Portfolio Hosting</li>
+              </ul>
+              <button class="btn-pricing-cta" onclick="selectPricingPlan('Premium')">Upgrade to Premium</button>
+            </div>
+
+            <!-- Pro Card -->
+            <div class="glass-card pricing-card">
+              <div class="pricing-card-header">
+                <div class="pricing-name">Pro Career</div>
+                <div class="pricing-price" id="pro-price-val">$19.99 <span>/ mo</span></div>
+              </div>
+              <ul class="pricing-features">
+                <li><i data-lucide="check"></i> Everything in Premium</li>
+                <li><i data-lucide="check"></i> Portfolio Generator & Hosting</li>
+                <li><i data-lucide="check"></i> Mock Interview voice evaluations</li>
+                <li><i data-lucide="check"></i> Priority Ticket Support</li>
+                <li><i data-lucide="check"></i> Career Coaching consultations</li>
+                <li><i data-lucide="check"></i> Custom Domain connection</li>
+              </ul>
+              <button class="btn-pricing-cta" onclick="selectPricingPlan('Pro')">Get Pro Career</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQs Section -->
+        <section class="faq-sec">
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">Common questions about the OneStep Resume AI platform, templates, and billing.</p>
+
+          <div class="faq-accordion">
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How does the ATS compatibility score work?</span>
+                <i data-lucide="chevron-down"></i>
+              </div>
+              <div class="faq-answer">
+                <p>Our algorithm scans your resume template structure and matches your keywords against the job
+                  description using a TF-IDF text density calculator. It also checks formatting elements like font
+                  sizes, paragraph lengths, and table usage to score compatibility between 0 and 100.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Will my data be used to train AI models?</span>
+                <i data-lucide="chevron-down"></i>
+              </div>
+              <div class="faq-answer">
+                <p>Absolutely not. We have strict privacy policies in place. Your resumes, project descriptions, cover
+                  letters, and chat records are stored locally or in encrypted databases, and are never used to train
+                  Anthropic, OpenAI, or other foundational language models.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>Can I export my resume to Microsoft Word (DOCX)?</span>
+                <i data-lucide="chevron-down"></i>
+              </div>
+              <div class="faq-answer">
+                <p>Yes. The platform supports exporting your resume files as pixel-perfect PDFs, standard JSON schema
+                  data exports, and fully editable Word files (DOCX) matching the selected layout structure.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question">
+                <span>How accurate is the AI Career Coach?</span>
+                <i data-lucide="chevron-down"></i>
+              </div>
+              <div class="faq-answer">
+                <p>The AI Career Coach uses deep contextual history to evaluate your work experience and target
+                  companies. It is highly accurate for formatting tips, mock behavioral preparation, and identifying key
+                  technical tools missing from your profile.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="app-footer">
+          <p>© 2026 OneStep Resume AI. Built with premium design frameworks. All rights reserved.</p>
+        </footer>
+      </div>
+
+      <!-- VIEW 2: USER DASHBOARD -->
+      <div id="dashboard-view" class="page-view animate-fade">
+        <div class="title-section">
+          <h1>Welcome Back, <span id="dash-username-span">Sarah</span></h1>
+          <p class="subtitle">Here is an overview of your active resume, ATS scores, and target company roadmaps.</p>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- Left side widgets -->
+          <div class="dashboard-left">
+
+            <!-- Metric widgets -->
+            <div class="metrics-row">
+              <div class="glass-card metric-card">
+                <div class="metric-label">Active ATS Score</div>
+                <div class="metric-val" id="dash-ats-score">76%</div>
+                <div class="metric-trend"><i data-lucide="trending-up"></i> +8% this week</div>
+                <div class="metric-progress">
+                  <div class="metric-progress-bar" id="dash-ats-bar" style="width: 76%;"></div>
+                </div>
+              </div>
+
+              <div class="glass-card metric-card">
+                <div class="metric-label">Roadmap Progress</div>
+                <div class="metric-val" id="dash-roadmap-progress">40%</div>
+                <div class="metric-trend" id="dash-roadmap-trend">2 of 5 skills completed</div>
+                <div class="metric-progress">
+                  <div class="metric-progress-bar" id="dash-roadmap-bar" style="width: 40%;"></div>
+                </div>
+              </div>
+
+              <div class="glass-card metric-card">
+                <div class="metric-label">Resume Health</div>
+                <div class="metric-val" id="dash-resume-completion">85%</div>
+                <div class="metric-trend"><i data-lucide="check-circle-2"></i> Almost complete</div>
+                <div class="metric-progress">
+                  <div class="metric-progress-bar" id="dash-resume-bar" style="width: 85%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Target company overview card -->
+            <div class="glass-card">
+              <h3>Target Preparation</h3>
+              <p class="subtitle">Your selected roles and focus companies.</p>
+
+              <div class="grid-2">
+                <div class="target-company-badge">
+                  <div class="target-logo" id="dash-target-logo" style="background-color:#4285F4; color:white;">G</div>
+                  <div class="user-info">
+                    <span class="user-name" id="dash-target-company">Google</span>
+                    <span class="user-tier" id="dash-target-role">Backend Engineer</span>
+                  </div>
+                </div>
+
+                <div style="display:flex; align-items:center; justify-content:flex-end;">
+                  <button class="btn-secondary-outline" onclick="navigateTo('companies-view')">Change Target</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity list -->
+            <div class="glass-card">
+              <h3>Recent Activity</h3>
+              <p class="subtitle">Your history of resume iterations and prep steps.</p>
+
+              <div class="activity-list" id="dashboard-activity-container">
+                <!-- Activities loaded dynamically via app.js -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right side widgets -->
+          <div class="dashboard-right">
+
+            <!-- Quick actions list -->
+            <div class="glass-card quick-actions-card">
+              <h3>Quick Actions</h3>
+              <div class="btn-action-tile" onclick="navigateTo('resume-view')">
+                <i data-lucide="edit-3"></i>
+                <div class="tile-info">
+                  <span class="tile-title">Edit Resume Details</span>
+                  <span class="tile-desc">Add projects, degrees or bullet points.</span>
+                </div>
+              </div>
+
+              <div class="btn-action-tile" onclick="navigateTo('ats-view')">
+                <i data-lucide="file-check"></i>
+                <div class="tile-info">
+                  <span class="tile-title">Run ATS Diagnostics</span>
+                  <span class="tile-desc">Upload PDF and compare to job specs.</span>
+                </div>
+              </div>
+
+              <div class="btn-action-tile" onclick="navigateTo('coach-view')">
+                <i data-lucide="sparkles"></i>
+                <div class="tile-info">
+                  <span class="tile-title">Consult AI Coach</span>
+                  <span class="tile-desc">Get feedback on system design or behavioral rounds.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Suggested Courses/Materials -->
+            <div class="glass-card">
+              <h3>Recommended Learning</h3>
+              <p class="subtitle">Curated materials matching your roadmaps.</p>
+
+              <div class="activity-list" style="margin-top:16px;" id="dashboard-courses-container">
+                <!-- Courses loaded dynamically -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 3: AI RESUME BUILDER (SPLIT SCREEN) -->
+      <div id="resume-view" class="page-view-flex animate-fade">
+        <div class="split-layout">
+
+          <!-- LEFT PANEL: EDIT FORMS -->
+          <div class="editor-panel">
+            <!-- Editor Tabs -->
+            <div class="editor-tabs">
+              <button class="editor-tab active" data-tab="templates">
+                <i data-lucide="layout-template"></i>
+                Templates
+              </button>
+              <button class="editor-tab" data-tab="content">
+                <i data-lucide="file-text"></i>
+                Content
+              </button>
+              <button class="editor-tab" data-tab="design">
+                <i data-lucide="palette"></i>
+                Design
+              </button>
+            </div>
+
+            <!-- Tab Content: Templates -->
+            <div class="editor-tab-content active" id="tab-templates">
+              <div class="template-browser-header">
+                <h3>Choose Template</h3>
+                <span class="premium-badge">2 Premium Features</span>
+              </div>
+
+              <!-- Category Filters -->
+              <div class="template-filters">
+                <button class="filter-btn active" data-filter="all">All templates</button>
+                <button class="filter-btn" data-filter="ats">ATS Friendly</button>
+                <button class="filter-btn" data-filter="popular">Popular</button>
+                <button class="filter-btn" data-filter="creative">Creative</button>
+              </div>
+
+              <!-- Template Grid -->
+              <div class="template-grid">
+                <div class="template-card active" data-template="modern">
+                  <div class="template-preview modern-preview">
+                    <div class="preview-header">
+                      <div class="preview-name">Sarah Jenkins</div>
+                      <div class="preview-title">Software Engineer</div>
+                    </div>
+                    <div class="preview-body">
+                      <div class="preview-section">Experience</div>
+                      <div class="preview-line"></div>
+                      <div class="preview-line short"></div>
+                    </div>
+                  </div>
+                  <div class="template-info">
+                    <div class="template-name">Modern</div>
+                    <div class="template-badges">
+                      <span class="badge premium">PREMIUM</span>
+                      <span class="badge ats">ATS</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="template-card" data-template="classic">
+                  <div class="template-preview classic-preview">
+                    <div class="preview-header centered">
+                      <div class="preview-name">Sarah Jenkins</div>
+                      <div class="preview-contact">sjenkins@gmail.com</div>
+                    </div>
+                    <div class="preview-body">
+                      <div class="preview-section">Experience</div>
+                      <div class="preview-line"></div>
+                    </div>
+                  </div>
+                  <div class="template-info">
+                    <div class="template-name">Classic</div>
+                    <div class="template-badges">
+                      <span class="badge ats">ATS</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="template-card" data-template="minimal">
+                  <div class="template-preview minimal-preview">
+                    <div class="preview-header">
+                      <div class="preview-name">Sarah Jenkins</div>
+                    </div>
+                    <div class="preview-body">
+                      <div class="preview-section">Experience</div>
+                      <div class="preview-line"></div>
+                      <div class="preview-line short"></div>
+                    </div>
+                  </div>
+                  <div class="template-info">
+                    <div class="template-name">Minimal</div>
+                    <div class="template-badges">
+                      <span class="badge ats">ATS</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="template-card" data-template="creative">
+                  <div class="template-preview creative-preview">
+                    <div class="preview-sidebar">
+                      <div class="preview-name">Sarah J.</div>
+                      <div class="preview-skills">Skills</div>
+                    </div>
+                    <div class="preview-main">
+                      <div class="preview-section">Experience</div>
+                      <div class="preview-line"></div>
+                    </div>
+                  </div>
+                  <div class="template-info">
+                    <div class="template-name">Creative</div>
+                    <div class="template-badges">
+                      <span class="badge premium">PREMIUM</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Content: Content -->
+            <div class="editor-tab-content" id="tab-content">
+              <div class="editor-header">
+                <h3>Resume Content</h3>
+                <button class="btn-secondary-outline" id="btn-reset-resume"
+                  style="padding:6px 12px; font-size:0.75rem;">
+                  <i data-lucide="rotate-ccw"></i> Reset
+                </button>
+              </div>
+
+              <!-- AI ASSISTANT PANEL -->
+              <div class="ai-panel-strip" id="ai-assistant-panel">
+                <div class="ai-panel-header">
+                  <div class="ai-panel-header-left">
+                    <i data-lucide="sparkles"></i>
+                    <span class="ai-panel-title">AI Resume Assistant</span>
+                    <span class="ai-panel-badge">Claude</span>
+                  </div>
+                  <div class="ai-score-chip">
+                    <div class="score-dot"></div>
+                    <span id="ai-panel-score-text">Resume Score: 82%</span>
+                  </div>
+                </div>
+                <div class="ai-actions-grid">
+                  <button class="ai-action-btn" id="btn-ai-gen-summary" onclick="aiGenerateSummary()">
+                    <i data-lucide="wand-2"></i>
+                    <span>
+                      Generate Summary
+                      <em class="ai-btn-sub">Auto-write from experience</em>
+                    </span>
+                  </button>
+                  <button class="ai-action-btn" id="btn-ai-suggest-skills" onclick="aiSuggestSkills()">
+                    <i data-lucide="zap"></i>
+                    <span>
+                      Suggest Skills
+                      <em class="ai-btn-sub">Based on your role & JD</em>
+                    </span>
+                  </button>
+                  <button class="ai-action-btn" id="btn-ai-import-text" onclick="openAIImportModal()">
+                    <i data-lucide="clipboard-paste"></i>
+                    <span>
+                      Import from Text
+                      <em class="ai-btn-sub">Paste raw resume to parse</em>
+                    </span>
+                  </button>
+                  <button class="ai-action-btn" id="btn-ai-quick-score" onclick="aiQuickScore()">
+                    <i data-lucide="bar-chart-3"></i>
+                    <span>
+                      AI Quick Score
+                      <em class="ai-btn-sub">Rate resume strength</em>
+                    </span>
+                  </button>
+                </div>
+                <div class="resume-ai-score-bar">
+                  <span class="score-label">Resume Strength</span>
+                  <div class="score-track">
+                    <div class="score-fill" id="ai-score-fill-bar" style="width: 82%;"></div>
+                  </div>
+                  <span class="score-val" id="ai-score-fill-val">82%</span>
+                </div>
+              </div>
+
+              <!-- Scrollable Content Wrapper -->
+              <div class="editor-content-scroll">
+
+                <!-- Section 1: Contact Details -->
+                <div class="collapsible-section active">
+                  <div class="collapsible-header">
+                    <span>Personal & Contact Info</span>
+                    <i data-lucide="chevron-down"></i>
+                  </div>
+                  <div class="collapsible-body">
+                    <div class="form-group">
+                      <label for="res-fullname">Full Name</label>
+                      <input type="text" id="res-fullname" class="form-control" value="Sarah Jenkins">
+                    </div>
+                    <div class="form-group">
+                      <label for="res-email">Email Address</label>
+                      <input type="email" id="res-email" class="form-control" value="sjenkins@gmail.com">
+                    </div>
+                    <div class="form-group">
+                      <label for="res-phone">Phone Number</label>
+                      <input type="text" id="res-phone" class="form-control" value="(555) 019-2834">
+                    </div>
+                    <div class="form-group">
+                      <label for="res-location">Location</label>
+                      <input type="text" id="res-location" class="form-control" value="San Francisco, CA">
+                    </div>
+                    <div class="form-group">
+                      <label for="res-website">Website/Portfolio URL</label>
+                      <input type="text" id="res-website" class="form-control" value="sjenkins.dev">
+                    </div>
+                    <div class="form-group">
+                      <label for="res-summary">Professional Summary</label>
+                      <textarea id="res-summary"
+                        class="form-control">Results-oriented Software Engineer with 3+ years of experience designing and scaling web services, microservices architectures, and relational schemas. Passionate about developer workflows and codebase craftsmanship.</textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section 2: Work Experience (Repeater) -->
+                <div class="collapsible-section">
+                  <div class="collapsible-header">
+                    <span>Work Experience</span>
+                    <i data-lucide="chevron-down"></i>
+                  </div>
+                  <div class="collapsible-body">
+                    <div id="res-experience-list">
+                      <!-- Loaded dynamically, supports adding/removing items -->
+                    </div>
+                    <button class="btn-add-repeater" id="btn-add-experience">
+                      <i data-lucide="plus"></i> Add Work Position
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Section 3: Education (Repeater) -->
+                <div class="collapsible-section">
+                  <div class="collapsible-header">
+                    <span>Education</span>
+                    <i data-lucide="chevron-down"></i>
+                  </div>
+                  <div class="collapsible-body">
+                    <div id="res-education-list">
+                      <!-- Loaded dynamically -->
+                    </div>
+                    <button class="btn-add-repeater" id="btn-add-education">
+                      <i data-lucide="plus"></i> Add Education Degree
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Section 4: Technical Skills -->
+                <div class="collapsible-section">
+                  <div class="collapsible-header">
+                    <span>Technical Skills</span>
+                    <i data-lucide="chevron-down"></i>
+                  </div>
+                  <div class="collapsible-body">
+                    <div class="form-group">
+                      <label for="res-skills-list-val">Skills (comma separated)</label>
+                      <textarea id="res-skills-list-val" class="form-control"
+                        placeholder="React, Node.js, Go, PostgreSQL, AWS, Git, System Design">React, Node.js, Go, PostgreSQL, AWS, Git, REST APIs, Jest</textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section 5: Projects (Repeater) -->
+                <div class="collapsible-section">
+                  <div class="collapsible-header">
+                    <span>Projects</span>
+                    <i data-lucide="chevron-down"></i>
+                  </div>
+                  <div class="collapsible-body">
+                    <div id="res-projects-list">
+                      <!-- Loaded dynamically -->
+                    </div>
+                    <button class="btn-add-repeater" id="btn-add-project">
+                      <i data-lucide="plus"></i> Add Personal Project
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+              <!-- End Scrollable Content Wrapper -->
+            </div>
+
+            <!-- Tab Content: Design -->
+            <div class="editor-tab-content" id="tab-design">
+              <div class="design-controls-header">
+                <h3>Text & Layout</h3>
+              </div>
+
+              <!-- Section Manager -->
+              <div class="section-manager">
+                <div class="section-label">Section Manager</div>
+                <div class="section-list" id="section-list">
+                  <div class="section-item" data-section="summary">
+                    <div class="section-handle">
+                      <i data-lucide="grip-vertical"></i>
+                    </div>
+                    <div class="section-info">
+                      <span class="section-name">Summary</span>
+                    </div>
+                    <label class="section-toggle">
+                      <input type="checkbox" checked data-section="summary">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="section-item" data-section="experience">
+                    <div class="section-handle">
+                      <i data-lucide="grip-vertical"></i>
+                    </div>
+                    <div class="section-info">
+                      <span class="section-name">Experience</span>
+                    </div>
+                    <label class="section-toggle">
+                      <input type="checkbox" checked data-section="experience">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="section-item" data-section="education">
+                    <div class="section-handle">
+                      <i data-lucide="grip-vertical"></i>
+                    </div>
+                    <div class="section-info">
+                      <span class="section-name">Education</span>
+                    </div>
+                    <label class="section-toggle">
+                      <input type="checkbox" checked data-section="education">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="section-item" data-section="skills">
+                    <div class="section-handle">
+                      <i data-lucide="grip-vertical"></i>
+                    </div>
+                    <div class="section-info">
+                      <span class="section-name">Skills</span>
+                    </div>
+                    <label class="section-toggle">
+                      <input type="checkbox" checked data-section="skills">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="section-item" data-section="projects">
+                    <div class="section-handle">
+                      <i data-lucide="grip-vertical"></i>
+                    </div>
+                    <div class="section-info">
+                      <span class="section-name">Projects</span>
+                    </div>
+                    <label class="section-toggle">
+                      <input type="checkbox" checked data-section="projects">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Layout Controls -->
+              <div class="layout-controls">
+                <div class="section-label">Typography</div>
+
+                <div class="control-group">
+                  <label>Font Size</label>
+                  <input type="range" id="font-size-slider" min="10" max="16" value="12" step="0.5">
+                  <span class="control-value" id="font-size-value">12px</span>
+                </div>
+
+                <div class="control-group">
+                  <label>Line Height</label>
+                  <input type="range" id="line-height-slider" min="1" max="2" value="1.5" step="0.1">
+                  <span class="control-value" id="line-height-value">1.5</span>
+                </div>
+
+                <div class="section-label">Spacing</div>
+
+                <div class="control-group">
+                  <label>Section Spacing</label>
+                  <input type="range" id="section-spacing-slider" min="8" max="32" value="16" step="2">
+                  <span class="control-value" id="section-spacing-value">16px</span>
+                </div>
+
+                <div class="control-group">
+                  <label>Margin</label>
+                  <input type="range" id="margin-slider" min="20" max="60" value="40" step="5">
+                  <span class="control-value" id="margin-value">40px</span>
+                </div>
+
+                <div class="section-label">Alignment</div>
+
+                <div class="control-group">
+                  <label>Header Alignment</label>
+                  <select id="header-alignment-select">
+                    <option value="left">Left</option>
+                    <option value="center">Center</option>
+                    <option value="right">Right</option>
+                  </select>
+                </div>
+
+                <div class="control-group">
+                  <label>Resume Density</label>
+                  <select id="density-select">
+                    <option value="compact">Compact</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="spacious">Spacious</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT PANEL: PREVIEW PANEL -->
+          <div class="preview-panel">
+            <div class="preview-toolbar">
+              <div class="preview-options">
+                <span>Template:</span>
+                <select class="preview-template-select" id="template-selector">
+                  <option value="modern">Modern (Gradient Accent)</option>
+                  <option value="classic">Classic (Serif Centered)</option>
+                  <option value="minimal">Minimal (Clean Left)</option>
+                  <option value="creative">Creative (Split Dark)</option>
+                </select>
+              </div>
+
+              <div class="preview-actions-group">
+                <button class="btn-toolbar" id="btn-toggle-ai-chat" title="Open AI Resume Assistant"
+                  onclick="toggleAIResumeChat()" style="gap:6px;">
+                  <i data-lucide="sparkles"></i> AI Chat
+                </button>
+                <button class="btn-toolbar" id="btn-export-json">
+                  <i data-lucide="download"></i> JSON
+                </button>
+                <button class="btn-toolbar" id="btn-export-docx">
+                  <i data-lucide="file-type-2"></i> Word
+                </button>
+                <button class="btn-toolbar btn-toolbar-primary" id="btn-print-pdf">
+                  <i data-lucide="printer"></i> Print PDF
+                </button>
+              </div>
+
+              <div class="preview-zoom-controls">
+                <button class="btn-zoom" id="btn-zoom-out" title="Zoom Out">
+                  <i data-lucide="minus"></i>
+                </button>
+                <span class="zoom-level" id="zoom-level">100%</span>
+                <button class="btn-zoom" id="btn-zoom-in" title="Zoom In">
+                  <i data-lucide="plus"></i>
+                </button>
+                <button class="btn-zoom" id="btn-fit-width" title="Fit Width">
+                  <i data-lucide="scan-line"></i>
+                </button>
+                <button class="btn-zoom" id="btn-fit-height" title="Fit Height">
+                  <i data-lucide="maximize"></i>
+                </button>
+                <button class="btn-zoom" id="btn-fullscreen" title="Fullscreen">
+                  <i data-lucide="fullscreen"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="resume-preview-container">
+              <!-- Actual resume document markup -->
+              <div class="resume-paper template-modern" id="resume-paper-target">
+                <!-- Content injected dynamically via resume.js -->
+              </div>
+            </div>
+
+            <!-- AI RESUME CHAT DRAWER -->
+            <div class="ai-resume-chat-drawer" id="ai-resume-chat-drawer">
+              <div class="ai-drawer-header">
+                <div class="ai-drawer-header-left">
+                  <i data-lucide="sparkles"></i>
+                  <div>
+                    <div class="ai-drawer-title">AI Resume Assistant</div>
+                    <div class="ai-drawer-subtitle">Powered by Claude • Context-aware</div>
+                  </div>
+                  <span class="ai-panel-badge">Claude</span>
+                </div>
+                <button class="ai-drawer-close" onclick="toggleAIResumeChat()">
+                  <i data-lucide="x"></i>
+                </button>
+              </div>
+
+              <!-- Quick action chips -->
+              <div class="ai-drawer-chips">
+                <button class="ai-drawer-chip" onclick="sendAIDrawerChip('Improve my professional summary')">✍️ Improve
+                  Summary</button>
+                <button class="ai-drawer-chip"
+                  onclick="sendAIDrawerChip('What skills should I add for a Google backend role?')">⚡ Suggest
+                  Skills</button>
+                <button class="ai-drawer-chip"
+                  onclick="sendAIDrawerChip('Make my bullet points more impactful with metrics')">📊 Add
+                  Metrics</button>
+                <button class="ai-drawer-chip" onclick="sendAIDrawerChip('How ATS-friendly is my current resume?')">🎯
+                  ATS Tips</button>
+                <button class="ai-drawer-chip" onclick="sendAIDrawerChip('What sections am I missing?')">🔍
+                  Review</button>
+              </div>
+
+              <!-- Messages area -->
+              <div class="ai-drawer-messages" id="ai-drawer-messages-container">
+                <div class="ai-drawer-msg ai">
+                  <div class="ai-drawer-msg-avatar">AI</div>
+                  <div>
+                    <div class="ai-drawer-msg-bubble">
+                      👋 Hi! I'm your AI Resume Assistant. I've analyzed your current resume and I'm ready to help you
+                      craft something outstanding.<br><br>
+                      You can ask me to rewrite sections, suggest missing keywords, score your resume against job
+                      descriptions, or tailor it for specific companies.
+                      <span class="ai-drawer-msg-time">Just now</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Input -->
+              <div class="ai-drawer-input-area">
+                <textarea id="ai-drawer-input-field" class="ai-drawer-input"
+                  placeholder="Ask the AI to improve your resume..." rows="1"
+                  onkeydown="handleAIDrawerKeydown(event)"></textarea>
+                <button class="ai-drawer-send-btn" onclick="sendAIDrawerMessage()" id="ai-drawer-send-btn">
+                  <i data-lucide="send"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- VIEW 4: ATS RESUME ANALYZER -->
+      <div id="ats-view" class="page-view animate-fade">
+        <div class="title-section">
+          <h1>ATS Resume Analyzer</h1>
+          <p class="subtitle">Upload your resume and paste a target job description to run automated compliance checks.
+          </p>
+        </div>
+
+        <div class="ats-grid">
+          <!-- Left input cards -->
+          <div style="display:flex; flex-direction:column; gap:24px; margin-top:24px;">
+            <div class="glass-card">
+              <h3>1. Upload Resume</h3>
+              <p class="subtitle">Upload your PDF or DOCX file (up to 5MB).</p>
+
+              <div class="upload-dropzone" id="ats-file-dropzone">
+                <div class="upload-icon-circle">
+                  <i data-lucide="upload-cloud" style="width:28px; height:28px;"></i>
+                </div>
+                <div class="upload-label" id="dropzone-status">Drag & drop your file here, or click to browse</div>
+                <div class="upload-formats">Supports PDF, DOCX, TXT</div>
+                <input type="file" id="ats-file-input" style="display:none;" accept=".pdf,.docx,.txt">
+              </div>
+            </div>
+
+            <div class="glass-card">
+              <h3>2. Paste Job Description</h3>
+              <p class="subtitle">Paste the full job post details from LinkedIn or company careers site.</p>
+
+              <div class="form-group" style="margin-top:16px;">
+                <textarea id="ats-job-desc-input" class="form-control" style="min-height:220px;"
+                  placeholder="Paste company description, requirements, skills list and qualifications here...">Role: Software Engineer II - Backend
+Location: Mountain View, CA
+
+Core Responsibilities:
+- Design and build highly scalable distributed microservices APIs.
+- Work closely with cloud infrastructure platforms (AWS, GCP).
+- Collaborate with frontend product engineers to define schema interfaces.
+
+Key Qualifications:
+- 3+ years experience engineering production systems.
+- Strong proficiency in Go, C++ or Java.
+- Expert knowledge of SQL database systems (PostgreSQL, MySQL), indexes, and relational structure.
+- Familiarity with caching systems like Redis and container runtimes like Docker.
+- Exceptional problem-solving skills and communication.</textarea>
+              </div>
+
+              <button class="btn-primary-glow" id="btn-run-ats-analysis" style="width:100%;">
+                <i data-lucide="activity"></i> Run Diagnostic Check
+              </button>
+            </div>
+          </div>
+
+          <!-- Right analysis report cards -->
+          <div style="margin-top:24px;">
+            <div class="glass-card ats-results-panel" id="ats-results-placeholder">
+              <div style="text-align:center; padding:48px 0; color:var(--text-muted);">
+                <i data-lucide="gauge" style="width:48px; height:48px; margin-bottom:16px; opacity:0.3;"></i>
+                <p>Provide a resume and job description to see your score report.</p>
+              </div>
+            </div>
+
+            <div class="glass-card ats-results-panel" id="ats-results-report" style="display:none;">
+              <!-- Target results loaded dynamically by ats.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 5: COMPANY PREPARATION DATABASE -->
+      <div id="companies-view" class="page-view animate-fade">
+        <!-- Main listing View -->
+        <div id="company-list-pane">
+          <div class="title-section">
+            <h1>Company Preparation Database</h1>
+            <p class="subtitle">Browse hiring pipelines, common questions, salary metrics, and key details for top tech
+              employers.</p>
+          </div>
+
+          <div class="search-filter-bar" style="margin-top:24px;">
+            <div class="search-input-wrapper">
+              <i data-lucide="search" style="width:20px; height:20px;"></i>
+              <input type="text" id="company-search-input" class="form-control"
+                placeholder="Search companies (Google, Meta, Stripe...)...">
+            </div>
+            <select class="form-control" id="company-filter-category" style="width:180px;">
+              <option value="all">All Categories</option>
+              <option value="Tech">Tier 1 Tech</option>
+              <option value="Startups">Unicorns/Startups</option>
+            </select>
+          </div>
+
+          <div class="company-cards-grid" id="company-grid-container">
+            <!-- Loaded dynamically from data.js -->
+          </div>
+        </div>
+
+        <!-- Detailed single view page -->
+        <div id="company-detail-pane" style="display:none;">
+          <!-- Loaded dynamically from data.js when a company card is clicked -->
+        </div>
+      </div>
+
+      <!-- VIEW 6: AI SKILL ROADMAP -->
+      <div id="roadmap-view" class="page-view animate-fade">
+        <div class="title-section">
+          <h1>Interactive Skill Roadmaps</h1>
+          <p class="subtitle">Generate custom timeline roadmaps to match your dream job requirements.</p>
+        </div>
+
+        <div class="glass-card" style="margin-top:24px;">
+          <div class="roadmap-generator-box">
+            <div class="form-group" style="margin-bottom:0; flex-grow:1;">
+              <label for="roadmap-select-company">Target Company</label>
+              <select class="form-control" id="roadmap-select-company">
+                <option value="google">Google</option>
+                <option value="meta">Meta</option>
+                <option value="stripe">Stripe</option>
+                <option value="netflix">Netflix</option>
+                <option value="apple">Apple</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0; flex-grow:1;">
+              <label for="roadmap-select-role">Target Role</label>
+              <select class="form-control" id="roadmap-select-role">
+                <option value="backend">Software Engineer - Backend</option>
+                <option value="frontend">Software Engineer - Frontend</option>
+              </select>
+            </div>
+            <button class="btn-primary-glow" id="btn-generate-roadmap">
+              <i data-lucide="git-branch"></i> Generate Path
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Gantt-like timeline -->
+        <div class="glass-card" style="margin-top:24px;" id="roadmap-display-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+            <div>
+              <h3 id="roadmap-title-text">Google Backend Engineer Roadmap</h3>
+              <p class="subtitle">Complete the tasks sequentially. Drag to reorder, check off to update progress.</p>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:1.5rem; font-weight:800; color:var(--primary);" id="roadmap-progress-percent">0%
+              </div>
+              <span class="user-tier">Roadmap Progress</span>
+            </div>
+          </div>
+
+          <div class="roadmap-timeline-box" id="roadmap-timeline-container">
+            <!-- Timeline elements injected dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 7: AI CAREER COACH CHAT -->
+      <div id="coach-view" class="page-view animate-fade">
+        <div class="chat-container">
+          <div class="chat-header">
+            <div class="coach-status-circle"></div>
+            <div>
+              <h4 style="font-size:0.95rem; font-weight:700;">OneStep Career Coach</h4>
+              <span style="font-size:0.75rem; color:var(--text-secondary);">Powered by Claude 3.5 API • Active
+                context</span>
+            </div>
+          </div>
+
+          <!-- Message threads scrollbox -->
+          <div class="chat-messages" id="chat-messages-container">
+            <div class="chat-msg coach">
+              <p>Hello! I am your AI Career Coach. I have loaded details from your active profile and target
+                preferences.</p>
+              <p>How can I assist you with your career development today? You can ask me to:</p>
+              <ul>
+                <li>Evaluate your experience bullets against target keywords.</li>
+                <li>Conduct a mock interview for system designs or coding.</li>
+                <li>Formulate a personalized project idea for your portfolio.</li>
+              </ul>
+              <span class="chat-msg-time">Just now</span>
+            </div>
+          </div>
+
+          <!-- Fast prompt chips -->
+          <div class="prompt-chips-row">
+            <div class="prompt-chip" onclick="sendPromptChip('How do I prepare for my Google backend interview?')">
+              Google Prep Tips</div>
+            <div class="prompt-chip"
+              onclick="sendPromptChip('Explain how to write strong metrics in my resume bullets.')">Resume XYZ Metrics
+            </div>
+            <div class="prompt-chip" onclick="sendPromptChip('What are some good backend project ideas to stand out?')">
+              Project Ideas</div>
+            <div class="prompt-chip" onclick="sendPromptChip('Recommend certifications for cloud and system design.')">
+              Top Certifications</div>
+          </div>
+
+          <!-- Typing interface -->
+          <div class="chat-input-area">
+            <input type="text" id="chat-input-field" class="form-control"
+              placeholder="Ask the Career Coach anything...">
+            <button class="btn-primary-glow" id="btn-chat-send" style="padding:10px 20px;">
+              <i data-lucide="send"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 8: COVER LETTER GENERATOR -->
+      <div id="coverletter-view" class="page-view animate-fade">
+        <div class="title-section">
+          <h1>AI Cover Letter Generator</h1>
+          <p class="subtitle">Draft tailored, high-converting introduction letters for any company and role
+            specifications.</p>
+        </div>
+
+        <div class="grid-2" style="margin-top:24px;">
+          <!-- Inputs panel -->
+          <div class="glass-card">
+            <h3>Letter Details</h3>
+            <p class="subtitle">Complete the fields below to customize the output structure.</p>
+
+            <div class="form-group" style="margin-top:16px;">
+              <label for="cl-company">Target Company</label>
+              <input type="text" id="cl-company" class="form-control" value="Stripe">
+            </div>
+            <div class="form-group">
+              <label for="cl-role">Target Job Title</label>
+              <input type="text" id="cl-role" class="form-control" value="Backend Software Engineer">
+            </div>
+            <div class="form-group">
+              <label for="cl-manager">Hiring Manager Name (Optional)</label>
+              <input type="text" id="cl-manager" class="form-control" value="Engineering Recruiting Team">
+            </div>
+            <div class="form-group">
+              <label for="cl-motivation">Why are you excited about this role? (Optional)</label>
+              <textarea id="cl-motivation" class="form-control"
+                placeholder="E.g., Stripe's focus on elegant developer tooling aligns with my core values. I use their API docs daily..."></textarea>
+            </div>
+
+            <button class="btn-primary-glow" id="btn-generate-coverletter" style="width:100%;">
+              <i data-lucide="wand-2"></i> Generate Cover Letter
+            </button>
+          </div>
+
+          <!-- Outputs panel -->
+          <div class="glass-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <h3>Generated Cover Letter</h3>
+                <div class="preview-options">
+                  <select class="preview-template-select" id="cl-variation-select" style="padding:4px 8px;">
+                    <option value="0">Variation 1 (Metric Focused)</option>
+                    <option value="1">Variation 2 (Value/Mission Focused)</option>
+                    <option value="2">Variation 3 (Direct & Concise)</option>
+                  </select>
+                </div>
+              </div>
+              <textarea id="cl-output-text" class="form-control"
+                style="min-height:360px; font-family:var(--font-serif); line-height:1.6; font-size:0.9rem; background-color:var(--bg-app); border-color:var(--border-color);"></textarea>
+            </div>
+
+            <div style="display:flex; gap:12px; margin-top:20px;">
+              <button class="btn-secondary-outline" id="btn-copy-coverletter" style="flex-grow:1;">
+                <i data-lucide="copy"></i> Copy to Clipboard
+              </button>
+              <button class="btn-primary-glow" id="btn-download-coverletter" style="flex-grow:1;">
+                <i data-lucide="download"></i> Download PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 9: PORTFOLIO GENERATOR -->
+      <div id="portfolio-view" class="page-view animate-fade">
+        <div class="title-section">
+          <h1>Portfolio Website Generator</h1>
+          <p class="subtitle">Convert your resume data into a premium, responsive personal website deployed instantly.
+          </p>
+        </div>
+
+        <div class="portfolio-split">
+          <!-- Config panel -->
+          <div class="glass-card" style="display:flex; flex-direction:column; gap:16px;">
+            <h3>Portfolio Config</h3>
+            <p class="subtitle">Select themes and layout styles.</p>
+
+            <div class="form-group">
+              <label for="pf-theme">Aesthetic Theme</label>
+              <select id="pf-theme" class="form-control">
+                <option value="dark-nebula">Dark Nebula (Glassmorphism)</option>
+                <option value="minimalist-light">Nordic Clean (Light Minimal)</option>
+                <option value="developer-terminal">Retro Hacker (Monospace Terminal)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="pf-custom-slug">Portfolio URL Slug</label>
+              <div style="display:flex; align-items:center; gap:4px;">
+                <span style="font-size:0.75rem; color:var(--text-muted);">onestep.bio/</span>
+                <input type="text" id="pf-custom-slug" class="form-control" value="sjenkins" style="padding:6px 10px;">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Sections to Display</label>
+              <div style="display:flex; flex-direction:column; gap:8px; margin-top:4px;">
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:400;">
+                  <input type="checkbox" id="pf-show-exp" checked> Work Experience
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:400;">
+                  <input type="checkbox" id="pf-show-proj" checked> Personal Projects
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:400;">
+                  <input type="checkbox" id="pf-show-skills" checked> Technical Skills
+                </label>
+              </div>
+            </div>
+
+            <button class="btn-primary-glow" id="btn-deploy-portfolio">
+              <i data-lucide="rocket"></i> Deploy Live Portfolio
+            </button>
+          </div>
+
+          <!-- Live frame preview -->
+          <div class="portfolio-preview-box">
+            <div class="preview-toolbar">
+              <span style="color:rgba(255,255,255,0.6); font-size:0.75rem; font-weight:600;"
+                id="portfolio-live-url">Live Preview: sjenkins.onestep.bio</span>
+              <button class="btn-toolbar" id="btn-open-portfolio-window" style="padding:2px 8px; font-size:0.7rem;">
+                <i data-lucide="external-link" style="width:12px; height:12px;"></i> Open
+              </button>
+            </div>
+            <!-- Interactive Iframe representation -->
+            <iframe id="portfolio-preview-iframe" class="portfolio-iframe"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 10: ADMIN PANEL -->
+      <div id="admin-view" class="page-view animate-fade">
+        <div class="title-section">
+          <h1>Admin Control Panel</h1>
+          <p class="subtitle">Manage company directories, verify resources links, and track system analytics metrics.
+          </p>
+        </div>
+
+        <div class="admin-metrics-grid">
+          <div class="glass-card metric-card">
+            <div class="metric-label">Total Platform Users</div>
+            <div class="metric-val">12,482</div>
+            <div class="metric-trend"><i data-lucide="trending-up"></i> +14% monthly growth</div>
+          </div>
+          <div class="glass-card metric-card">
+            <div class="metric-label">Monthly Recurring Revenue</div>
+            <div class="metric-val">$18,432</div>
+            <div class="metric-trend"><i data-lucide="trending-up"></i> +22% ARR project</div>
+          </div>
+          <div class="glass-card metric-card">
+            <div class="metric-label">Conversion Rate</div>
+            <div class="metric-val">8.2%</div>
+            <div class="metric-trend"><i data-lucide="check"></i> Target: 5-10%</div>
+          </div>
+          <div class="glass-card metric-card">
+            <div class="metric-label">System Health</div>
+            <div class="metric-val">99.98%</div>
+            <div class="metric-trend"><i data-lucide="cpu"></i> All systems operational</div>
+          </div>
+        </div>
+
+        <div class="grid-2 chart-card">
+          <!-- Active signups SVG chart -->
+          <div class="glass-card">
+            <h3>Daily Active Users (DAU)</h3>
+            <p class="subtitle">Average user sessions logged per day over the past fortnight.</p>
+            <svg class="admin-chart-svg" viewBox="0 0 400 200" id="admin-chart-dau">
+              <!-- Rendered via admin.js -->
+            </svg>
+          </div>
+
+          <!-- Revenue growth SVG chart -->
+          <div class="glass-card">
+            <h3>Revenue Growth (MRR)</h3>
+            <p class="subtitle">Platform subscription earnings in USD over the past 6 months.</p>
+            <svg class="admin-chart-svg" viewBox="0 0 400 200" id="admin-chart-mrr">
+              <!-- Rendered via admin.js -->
+            </svg>
+          </div>
+        </div>
+
+        <!-- Table directories control -->
+        <div class="glass-card" style="margin-top:24px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h3>Quick Database Manager</h3>
+            <button class="btn-primary-glow" id="btn-admin-add-company" style="padding:6px 12px; font-size:0.8rem;">
+              <i data-lucide="plus"></i> Add Company
+            </button>
+          </div>
+
+          <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.85rem;"
+            id="admin-companies-table">
+            <thead>
+              <tr style="border-bottom:1.5px solid var(--border-color); color:var(--text-secondary);">
+                <th style="padding:10px 0;">Company</th>
+                <th>Category</th>
+                <th>Velocity</th>
+                <th>Base Salary</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body">
+              <!-- Companies listed dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Chatbot Analytics Dashboard -->
+        <div class="grid-2" style="margin-top: 24px;">
+          <div class="glass-card">
+            <h3>Support Chatbot Analytics</h3>
+            <p class="subtitle">Usage analytics collected from client interactions.</p>
+            <div class="analytics-metrics-list" style="margin-top: 16px; display:flex; flex-direction:column; gap:8px;">
+              <div
+                style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);">
+                <span>Total Clicks on Quick Actions</span>
+                <strong id="analytics-action-clicks" style="color:var(--primary);">0</strong>
+              </div>
+              <div
+                style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);">
+                <span>Human Agent Support Requests</span>
+                <strong id="analytics-support-requests" style="color:var(--error);">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <h3>Popular Inquiries & Failures</h3>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px;">
+              <div>
+                <h4
+                  style="font-size:0.75rem; text-transform:uppercase; color:var(--text-secondary); margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:4px;">
+                  Most Asked</h4>
+                <ul id="analytics-most-asked-list"
+                  style="list-style:none; padding:0; display:flex; flex-direction:column; gap:6px; font-size:0.8rem; color:var(--text-primary);">
+                  <li style="color:var(--text-muted);">None recorded</li>
+                </ul>
+              </div>
+              <div>
+                <h4
+                  style="font-size:0.75rem; text-transform:uppercase; color:var(--text-secondary); margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:4px;">
+                  Failed Queries</h4>
+                <ul id="analytics-failed-list"
+                  style="list-style:none; padding:0; display:flex; flex-direction:column; gap:6px; font-size:0.8rem; color:var(--text-primary);">
+                  <li style="color:var(--text-muted);">None recorded</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 11: SUPPORT CHAT -->
+      <div id="support-chat-view" class="page-view animate-fade">
+        <div class="chat-container">
+          <div class="chat-header">
+            <div class="coach-status-circle" style="background-color: var(--primary);"></div>
+            <div>
+              <h4 style="font-size:0.95rem; font-weight:700;">Customer Support</h4>
+              <span style="font-size:0.75rem; color:var(--text-secondary);">Typically replies in a few minutes</span>
+            </div>
+          </div>
+
+          <!-- Message threads scrollbox -->
+          <div class="chat-messages" id="support-chat-messages-container">
+            <div class="chat-msg coach">
+              <p>Hello! How can our support team help you today?</p>
+              <span class="chat-msg-time">Just now</span>
+            </div>
+          </div>
+
+          <!-- Typing interface -->
+          <div class="chat-input-area">
+            <input type="text" id="support-chat-input-field" class="form-control" placeholder="Type your message...">
+            <button class="btn-primary-glow" id="btn-support-chat-send" style="padding:10px 20px;"
+              onclick="sendSupportMessage()">
+              <i data-lucide="send"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL WINDOWS & TOAST LAYOUTS
+       ========================================================================== -->
+
+  <!-- AI Bullet Enhancement Choice Modal -->
+  <div class="modal-overlay" id="ai-enhance-modal">
+    <div class="modal-box large">
+      <div class="modal-header">
+        <h3>Claude AI Bullet Enhancer</h3>
+        <button class="btn-close-modal" id="btn-close-enhance-modal"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="subtitle" style="margin-top:0; margin-bottom:16px;">Select the best AI-generated variation to replace
+          your work bullet point.</p>
+
+        <div class="form-group">
+          <label>Original Bullet</label>
+          <input type="text" id="ai-modal-original" class="form-control" readonly
+            style="background-color:var(--bg-app); opacity:0.75;">
+        </div>
+
+        <div class="bullet-variations-list" id="ai-variations-target">
+          <!-- Bullet choices cards injected dynamically -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-outline" id="btn-close-enhance-modal-footer">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile & Target Role Configuration Modal -->
+  <div class="modal-overlay" id="profile-config-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Candidate Profile Settings</h3>
+        <button class="btn-close-modal" id="btn-close-profile-modal"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="prof-username">Display Name</label>
+          <input type="text" id="prof-username" class="form-control" value="Sarah Jenkins">
+        </div>
+        <div class="form-group">
+          <label for="prof-target-company">Target Company</label>
+          <select id="prof-target-company" class="form-control">
+            <option value="google">Google</option>
+            <option value="meta">Meta</option>
+            <option value="stripe">Stripe</option>
+            <option value="netflix">Netflix</option>
+            <option value="apple">Apple</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="prof-target-role">Target Role Focus</label>
+          <select id="prof-target-role" class="form-control">
+            <option value="backend">Software Engineer - Backend</option>
+            <option value="frontend">Software Engineer - Frontend</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="prof-experience-level">Experience Level</label>
+          <select id="prof-experience-level" class="form-control">
+            <option value="entry">Entry-Level</option>
+            <option value="mid">Mid-Level</option>
+            <option value="senior">Senior</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label style="display:flex; align-items:center; gap:8px; font-weight:400; font-size:0.85rem;">
+            <input type="checkbox" id="prof-membership" checked> Premium Account Membership
+          </label>
+        </div>
+
+        <div style="margin-top:20px; border-top:1px solid var(--border-color); padding-top:16px;">
+          <h4
+            style="margin-bottom:12px; color:var(--primary); font-size:0.9rem; display:flex; align-items:center; gap:8px;">
+            <i data-lucide="database" style="width:16px; height:16px;"></i> Cloud Sync & AI Settings
+          </h4>
+          <div class="form-group">
+            <label for="prof-gemini-key">Gemini API Key</label>
+            <input type="password" id="prof-gemini-key" class="form-control" placeholder="Enter your Gemini API key...">
+            <small style="color:var(--text-muted); font-size:0.75rem;">Used to dynamically generate custom-tailored
+              learning resources.</small>
+          </div>
+          <div class="form-group">
+            <label for="prof-supabase-url">Supabase URL</label>
+            <input type="text" id="prof-supabase-url" class="form-control"
+              placeholder="https://your-project.supabase.co">
+          </div>
+          <div class="form-group">
+            <label for="prof-supabase-key">Supabase Anon Key</label>
+            <input type="password" id="prof-supabase-key" class="form-control"
+              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+            <small style="color:var(--text-muted); font-size:0.75rem;">Syncs your bookmarked and completed resource
+              progress in the cloud.</small>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-outline" id="btn-close-profile-footer">Cancel</button>
+        <button class="btn-primary-glow" id="btn-save-profile">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Import from Text Modal -->
+  <div class="modal-overlay" id="ai-import-modal">
+    <div class="modal-box large">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <i data-lucide="clipboard-paste" style="color: #a855f7; width:20px; height:20px;"></i>
+          <h3>AI Resume Import</h3>
+          <span class="ai-panel-badge">Claude</span>
+        </div>
+        <button class="btn-close-modal" id="btn-close-import-modal"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="subtitle" style="margin-top:0; margin-bottom:16px;">Paste your existing resume as plain text. The AI
+          will automatically extract and populate all sections including work experience, education, skills, and contact
+          details.</p>
+        <div class="form-group">
+          <label for="ai-import-raw-text">Paste Raw Resume Text</label>
+          <textarea id="ai-import-raw-text" class="form-control ai-import-textarea" placeholder="Paste your entire resume as text here...
+
+Example:
+John Smith
+john@email.com | (555) 123-4567 | San Francisco, CA
+
+EXPERIENCE
+Google - Software Engineer II (2023-Present)
+• Led API redesign improving latency by 40%
+
+EDUCATION
+MIT - B.S. Computer Science (2019-2023)
+
+SKILLS
+Python, React, Node.js, AWS, Docker"></textarea>
+        </div>
+        <div id="ai-import-status" style="display:none; padding:12px; border-radius:var(--radius-sm); margin-top:8px;">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-outline" id="btn-cancel-import">Cancel</button>
+        <button class="btn-primary-glow" id="btn-run-import" onclick="runAIImport()">
+          <i data-lucide="sparkles"></i> Parse & Import
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Floating Support Center -->
+  <div class="floating-chat-container">
+    <button class="floating-chat-btn" id="btn-floating-chat-toggle" onclick="toggleFloatingChat()">
+      <i data-lucide="message-circle"></i>
+      <span class="chat-badge" id="floating-chat-badge" style="display: none;">2</span>
+    </button>
+    <div class="floating-chat-widget" id="floating-chat-widget">
+      <!-- Tab Content Areas -->
+      <div class="floating-chat-content">
+
+        <!-- Home Tab -->
+        <div class="tab-content active" id="tab-home">
+          <div class="tab-header">
+            <h3>Welcome to Support</h3>
+            <button class="btn-floating-action" onclick="toggleFloatingChat()" title="Close">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+          <div class="tab-body">
+            <div class="support-welcome">
+              <p class="welcome-text">Hi! How can we help you today?</p>
+              <div class="search-box">
+                <input type="text" class="form-control" placeholder="Search for help...">
+                <i data-lucide="search" class="search-icon"></i>
+              </div>
+            </div>
+            <div class="quick-actions-grid">
+              <div class="action-card" onclick="handleHomeCardClick('chat')">
+                <i data-lucide="message-circle"></i>
+                <span>Chat with Support</span>
+              </div>
+              <div class="action-card" onclick="handleHomeCardClick('faq')">
+                <i data-lucide="book-open"></i>
+                <span>FAQs</span>
+              </div>
+              <div class="action-card" onclick="handleHomeCardClick('guides')">
+                <i data-lucide="file-text"></i>
+                <span>Guides</span>
+              </div>
+              <div class="action-card" onclick="handleHomeCardClick('tutorials')">
+                <i data-lucide="video"></i>
+                <span>Tutorials</span>
+              </div>
+            </div>
+            <div class="support-categories">
+              <h4>Support Categories</h4>
+              <div class="category-item" onclick="handleCategoryClick('Resume Builder')">
+                <i data-lucide="file-text"></i>
+                <span>Resume Builder</span>
+              </div>
+              <div class="category-item" onclick="handleCategoryClick('ATS Analyzer')">
+                <i data-lucide="scan-line"></i>
+                <span>ATS Analyzer</span>
+              </div>
+              <div class="category-item" onclick="handleCategoryClick('Company Prep')">
+                <i data-lucide="building"></i>
+                <span>Company Prep</span>
+              </div>
+              <div class="category-item" onclick="handleCategoryClick('Skill Roadmaps')">
+                <i data-lucide="map"></i>
+                <span>Skill Roadmaps</span>
+              </div>
+              <div class="category-item" onclick="handleCategoryClick('AI Career Coach')">
+                <i data-lucide="user"></i>
+                <span>Career Coach</span>
+              </div>
+              <div class="category-item" onclick="handleCategoryClick('Billing')">
+                <i data-lucide="credit-card"></i>
+                <span>Billing</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Messages Tab -->
+        <div class="tab-content" id="tab-messages">
+          <div class="tab-header">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="coach-status-circle" style="background-color: var(--primary);"></div>
+              <strong>Support Chat</strong>
+            </div>
+            <button class="btn-floating-action" onclick="toggleFloatingChat()" title="Close">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+          <div class="tab-body messages-body">
+            <div class="floating-chat-messages" id="floating-chat-messages-container">
+              <div class="chat-msg coach">
+                <p>Hello! How can our support team help you today?</p>
+                <span class="chat-msg-time">Just now</span>
+              </div>
+            </div>
+            <div class="floating-chat-input-area">
+              <input type="text" id="floating-chat-input-field" class="form-control" placeholder="Type a message...">
+              <button class="btn-primary-glow" id="btn-floating-chat-send" style="padding:8px 12px;"
+                onclick="sendFloatingChatMessage()">
+                <i data-lucide="send"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Help Tab -->
+        <div class="tab-content" id="tab-help">
+          <div class="tab-header">
+            <h3>Help Center</h3>
+            <button class="btn-floating-action" onclick="toggleFloatingChat()" title="Close">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+          <div class="tab-body">
+            <div class="search-box">
+              <input type="text" class="form-control" placeholder="Search articles...">
+              <i data-lucide="search" class="search-icon"></i>
+            </div>
+            <div class="help-sections">
+              <div class="help-section">
+                <h4>Getting Started</h4>
+                <div class="help-item" onclick="toggleHelpArticle(this)">
+                  <span>How to create your first resume</span>
+                  <i data-lucide="chevron-right"></i>
+                  <div class="help-article-content">
+                    <p>To create your first resume, navigate to the Resume Builder section in the sidebar. Fill in your
+                      personal information, work experience, education, and skills. Use the AI Enhance button to improve
+                      your bullet points, then export to Word or PDF.</p>
+                  </div>
+                </div>
+                <div class="help-item" onclick="toggleHelpArticle(this)">
+                  <span>Understanding ATS scoring</span>
+                  <i data-lucide="chevron-right"></i>
+                  <div class="help-article-content">
+                    <p>ATS scoring analyzes how well your resume matches job descriptions. Use the ATS Analyzer to paste
+                      job descriptions and get a compatibility score with keyword matching and improvement suggestions.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="help-section">
+                <h4>Account & Billing</h4>
+                <div class="help-item" onclick="toggleHelpArticle(this)">
+                  <span>Upgrade to Premium</span>
+                  <i data-lucide="chevron-right"></i>
+                  <div class="help-article-content">
+                    <p>Premium members get unlimited AI enhancements, cover letter generator, custom roadmaps, and all
+                      designer templates. Click the Upgrade to Pro button in the header to upgrade your account.</p>
+                  </div>
+                </div>
+                <div class="help-item" onclick="toggleHelpArticle(this)">
+                  <span>Manage subscription</span>
+                  <i data-lucide="chevron-right"></i>
+                  <div class="help-article-content">
+                    <p>Manage your subscription from your profile settings. You can view billing history, change plans,
+                      or cancel your subscription at any time.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="help-section">
+                <h4>Technical Support</h4>
+                <div class="help-item" onclick="toggleHelpArticle(this)">
+                  <span>Export issues</span>
+                  <i data-lucide="chevron-right"></i>
+                  <div class="help-article-content">
+                    <p>If you're having trouble exporting, try using a different browser or clearing your cache. For
+                      persistent issues, contact support at support@onestep.ai</p>
+                  </div>
+                </div>
+                <div class="help-item" onclick="toggleHelpArticle(this)">
+                  <span>Template customization</span>
+                  <i data-lucide="chevron-right"></i>
+                  <div class="help-article-content">
+                    <p>Templates can be customized using the design panel. Change colors, fonts, and layouts to match
+                      your preferences. Premium members have access to more customization options.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- News Tab -->
+        <div class="tab-content" id="tab-news">
+          <div class="tab-header">
+            <h3>News</h3>
+            <button class="btn-floating-action" onclick="toggleFloatingChat()" title="Close">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+          <div class="tab-body">
+            <div class="news-section">
+              <h4>Latest from Team OneStep</h4>
+              <div class="news-card">
+                <div class="news-icon">
+                  <i data-lucide="sparkles"></i>
+                </div>
+                <div class="news-content">
+                  <h5>New Feature: AI Resume Writer</h5>
+                  <p>Let AI write your resume or cover letter in seconds with our new OpenAI integration.</p>
+                  <span class="news-date">Just now</span>
+                </div>
+              </div>
+              <div class="news-card">
+                <div class="news-icon">
+                  <i data-lucide="rocket"></i>
+                </div>
+                <div class="news-content">
+                  <h5>New Templates Added</h5>
+                  <p>5 new professional templates now available for Premium users.</p>
+                  <span class="news-date">2 days ago</span>
+                </div>
+              </div>
+              <div class="news-card">
+                <div class="news-icon">
+                  <i data-lucide="zap"></i>
+                </div>
+                <div class="news-content">
+                  <h5>Performance Improvements</h5>
+                  <p>Faster load times and smoother experience across all features.</p>
+                  <span class="news-date">1 week ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Navigation -->
+      <div class="floating-chat-nav">
+        <button class="nav-tab active" data-tab="home" onclick="switchToTab('home')">
+          <i data-lucide="home"></i>
+          <span>Home</span>
+        </button>
+        <button class="nav-tab" data-tab="messages" onclick="switchToTab('messages')">
+          <i data-lucide="message-circle"></i>
+          <span>Messages</span>
+        </button>
+        <button class="nav-tab" data-tab="help" onclick="switchToTab('help')">
+          <i data-lucide="help-circle"></i>
+          <span>Help</span>
+        </button>
+        <button class="nav-tab" data-tab="news" onclick="switchToTab('news')">
+          <i data-lucide="newspaper"></i>
+          <span>News</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Javascript Modules -->
+  <script src="data.js?v=3"></script>
+  <script src="resume.js?v=3"></script>
+  <script src="ats.js?v=3"></script>
+  <script src="admin.js?v=3"></script>
+  <script src="support-chat.js?v=3"></script>
+  <script src="app.js?v=3"></script>
+</body>
+
+</html>
